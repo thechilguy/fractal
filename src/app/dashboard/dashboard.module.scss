@@ -1,0 +1,67 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playwrite+HU:wght@100..400&display=swap");
+.Dashboard {
+  min-height: 100vh;
+  padding: 32px clamp(16px, 4vw, 48px);
+
+  color: #111;
+}
+
+.titleMain {
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 800;
+  text-align: center;
+  font-size: clamp(40px, 6vw, 92px);
+  line-height: 0.8;
+  letter-spacing: 2px;
+  margin: 0 0 clamp(24px, 4vw, 48px);
+  justify-content: center;
+  display: flex;
+  /* один над одним */
+  gap: 0; /* без проміжку між рядками */
+}
+
+.TasksContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(16px, 3vw, 48px);
+  align-items: start;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Панелі з виглядом “дві великі коробки” */
+.panel {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  min-height: 60vh; /* великі, як на скріні */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.panelHead {
+  padding: 14px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #4a4a4a;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #eee;
+}
+
+.panelBody {
+  flex: 1;
+  padding: 18px;
+}
+
+/* Мобільна адаптація — колонки стають стовпчиком */
+@media (max-width: 900px) {
+  .TasksContainer {
+    grid-template-columns: 1fr;
+  }
+  .panel {
+    min-height: 44vh;
+  }
+}
