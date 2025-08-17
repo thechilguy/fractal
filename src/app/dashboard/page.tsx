@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "@/app/dashboard/dashboard.module.scss";
 import YourTasks from "../component/YourTasks/page";
+import RoomBox from "../room/page";
 
 export default function Dashboard() {
   return (
@@ -16,7 +17,9 @@ export default function Dashboard() {
 
         <section className={styles.panel}>
           <div className={styles.panelHead}>AVAILABLE TASKS</div>
-          <div className={styles.panelBody}>{/* here available */}</div>
+          <div className={styles.panelBody}>
+            <RoomBox />
+          </div>
         </section>
       </div>
     </div>
