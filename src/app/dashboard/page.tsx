@@ -3,6 +3,8 @@ import styles from "@/app/dashboard/dashboard.module.scss";
 import YourTasks from "../component/YourTasks/page";
 import RoomBox from "../room/page";
 
+import AddRoom from "@/app/component/Room/AddRoom";
+
 export default function Dashboard() {
   return (
     <div className={styles.Dashboard}>
@@ -16,10 +18,11 @@ export default function Dashboard() {
         <YourTasks />
 
         <section className={styles.panel}>
-          <div className={styles.panelHead}>AVAILABLE TASKS</div>
-          <div className={styles.panelBody}>
+          <div className={styles.headerPart}>
             <RoomBox />
           </div>
+
+          <div className={styles.panelBody}></div>
         </section>
       </div>
     </div>

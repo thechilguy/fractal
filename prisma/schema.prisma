@@ -7,16 +7,69 @@ generator client {
   provider = "prisma-client-js"
 }
 
+/* 1) Статус запиту на приєднання */
+enum JoinRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+/* 2) Користувач */
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   email     String   @unique
   password  String
   name      String?
   image     String?
+
   todos     Todo[]   @relation("UserTodos")
+  rooms     Room[]   @relation("UserRooms")        // кімнати, де юзер — власник
+  // участь у запитах:
+  joinRequestsMade   JoinRequest[] @relation("JoinRequester")
+  joinRequestsHandled JoinRequest[] @relation("JoinResponder")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+/* 3) Кімната */
+model Room {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+
+  ownerId   String   @db.ObjectId
+  owner     User     @relation("UserRooms", fields: [ownerId], references: [id])
+
+ 
+  todos        Todo[]        @relation("RoomTodos")
+  joinRequests JoinRequest[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([ownerId])
+}
+
+
+model JoinRequest {
+  id            String            @id @default(auto()) @map("_id") @db.ObjectId
+  roomId        String            @db.ObjectId
+  requesterId   String            @db.ObjectId
+  status        JoinRequestStatus @default(PENDING)
+  createdAt     DateTime          @default(now())
+  respondedAt   DateTime?
+  respondedById String?           @db.ObjectId
+
+  room          Room              @relation(fields: [roomId], references: [id])
+  requester     User              @relation("JoinRequester", fields: [requesterId], references: [id])
+  respondedBy   User?             @relation("JoinResponder", fields: [respondedById], references: [id])
+
+  @@unique([roomId, requesterId])  
+  @@index([roomId])
+  @@index([requesterId])
+  @@index([respondedById])
+}
+
 
 model Todo {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -25,7 +78,14 @@ model Todo {
   isDone      Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
   userId      String   @db.ObjectId
   user        User     @relation("UserTodos", fields: [userId], references: [id])
+
+ 
+  roomId      String?  @db.ObjectId
+  room        Room?    @relation("RoomTodos", fields: [roomId], references: [id])
+
   @@index([userId])
+  @@index([roomId])
 }

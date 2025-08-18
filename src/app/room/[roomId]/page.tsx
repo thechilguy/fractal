@@ -1,82 +1,100 @@
-"use client";
+import { prisma } from "@/lib/prisma";
+import { currentUser } from "@/utils/auth";
+import { notFound } from "next/navigation";
+import { approveJoinRequest, rejectJoinRequest } from "@/actions/rooms";
+import styles from "./RoomDetailPage.module.scss";
 
-import styles from "./RoomItem.module.scss";
-import { FiUsers, FiCheckCircle, FiClock } from "react-icons/fi";
+export default async function RoomDetailPage({
+  params,
+}: {
+  params: { roomId: string };
+}) {
+  const user = await currentUser();
+  if (!user) notFound();
 
-type Props = {
-  id: string;
-  name: string;
-  tasksCount: number;
-  ownerName: string;
-  participants: number;
-  capacity: number;
-  status: "waiting" | "active" | "finished";
-  onJoin?: (id: string) => void;
-};
+  const room = await prisma.room.findUnique({
+    where: { id: params.roomId },
+    include: {
+      owner: true,
+      joinRequests: {
+        include: {
+          requester: true,
+        },
+      },
+    },
+  });
 
-export default function RoomItem({
-  id,
-  name,
-  tasksCount,
-  ownerName,
-  participants,
-  capacity,
-  status,
-  onJoin,
-}: Props) {
-  const statusLabel =
-    status === "waiting"
-      ? "Waiting"
-      : status === "active"
-      ? "Active"
-      : "Finished";
+  if (!room) notFound();
+
+  const isOwner = room.ownerId === user.id;
+  const isMember =
+    isOwner ||
+    room.joinRequests.some(
+      (jr) => jr.requesterId === user.id && jr.status === "APPROVED"
+    );
+
+  if (!isMember) {
+    return <div className={styles.accessDenied}>⛔ Access denied</div>;
+  }
 
   return (
-    <article
-      className={`${styles.card} ${
-        status === "active"
-          ? styles.active
-          : status === "finished"
-          ? styles.finished
-          : ""
-      }`}
-    >
-      <div className={styles.header}>
-        <h3 className={styles.title}>{name}</h3>
-        <span className={`${styles.status} ${styles[status]}`}>
-          {statusLabel}
-        </span>
-      </div>
+    <div className={styles.container}>
+      <h1 className={styles.roomName}>{room.name}</h1>
+      <p className={styles.owner}>
+        Owner: <span>{room.owner?.name ?? room.owner?.email}</span>
+      </p>
 
-      <div className={styles.meta}>
-        <span className={styles.owner}>Owner: {ownerName}</span>
-        <span className={styles.tasks}>Tasks: {tasksCount}</span>
-      </div>
+      {isOwner && (
+        <section className={styles.joinRequests}>
+          <h2>Join Requests</h2>
+          {room.joinRequests.filter((jr) => jr.status === "PENDING").length ===
+          0 ? (
+            <p>No pending requests</p>
+          ) : (
+            <ul>
+              {room.joinRequests
+                .filter((jr) => jr.status === "PENDING")
+                .map((jr) => (
+                  <li key={jr.id} className={styles.requestItem}>
+                    <span>{jr.requester.name ?? jr.requester.email}</span>
+                    <div className={styles.actions}>
+                      <form
+                        action={approveJoinRequest.bind(null, jr.id, room.id)}
+                      >
+                        <button type="submit" className={styles.approve}>
+                          Approve
+                        </button>
+                      </form>
+                      <form
+                        action={rejectJoinRequest.bind(null, jr.id, room.id)}
+                      >
+                        <button type="submit" className={styles.reject}>
+                          Reject
+                        </button>
+                      </form>
+                    </div>
+                  </li>
+                ))}
+            </ul>
+          )}
+        </section>
+      )}
 
-      <div className={styles.participants}>
-        <FiUsers /> {participants}/{capacity}
-      </div>
-
-      <div className={styles.actions}>
-        {status === "waiting" && (
-          <button
-            className={styles.joinBtn}
-            onClick={() => onJoin && onJoin(id)}
-          >
-            Join
-          </button>
-        )}
-        {status === "active" && (
-          <span className={styles.inProgress}>
-            <FiClock /> In Progress
-          </span>
-        )}
-        {status === "finished" && (
-          <span className={styles.done}>
-            <FiCheckCircle /> Completed
-          </span>
-        )}
-      </div>
-    </article>
+      <section className={styles.members}>
+        <h2>Members</h2>
+        <ul>
+          <li className={styles.ownerMember}>
+            {room.owner?.name ?? room.owner?.email} <span>(Owner)</span>
+          </li>
+          {room.joinRequests
+            .filter((jr) => jr.status === "APPROVED")
+            .map((jr) => (
+              <li key={jr.id} className={styles.memberItem}>
+                {jr.requester.name ?? jr.requester.email}
+              </li>
+            ))}
+        </ul>
+      </section>
+    </div>
   );
 }
