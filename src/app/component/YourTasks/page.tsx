@@ -1,20 +1,17 @@
-// app/component/YourTasks/page.tsx
-import styles from "@/app/component/YourTasks/YourTasks.module.scss";
-import TodoItem from "@/app/component/Todo/TodoItem";
+import styles from "./YourTasks.module.scss";
 import { prisma } from "@/lib/prisma";
 import { currentUser } from "@/utils/auth";
-import { redirect } from "next/navigation";
-import AddTask from "../AddTask/AddTask";
+import AddTask from "@/app/component/AddTask/AddTask";
+import TaskSwitcher from "./TaskSwitcher";
 
-// завжди свіжі дані для користувацьких списків
 export const revalidate = 0;
 
 export default async function YourTasks() {
   const user = await currentUser();
-  if (!user) redirect("/login");
+  if (!user) return null;
 
-  const todos = await prisma.todo.findMany({
-    where: { userId: user.id }, // ← ключове: тільки свої
+  const personal = await prisma.todo.findMany({
+    where: { userId: user.id, roomId: null },
     orderBy: { createdAt: "desc" },
     select: {
       id: true,
@@ -22,8 +19,32 @@ export default async function YourTasks() {
       description: true,
       createdAt: true,
       isDone: true,
+      roomId: true,
+      room: { select: { id: true, name: true } },
     },
   });
+
+  const subscriptions = await prisma.todoSubscription.findMany({
+    where: { userId: user.id },
+    select: {
+      todo: {
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          createdAt: true,
+          isDone: true,
+          roomId: true,
+          room: { select: { id: true, name: true } },
+        },
+      },
+    },
+  });
+
+  const followed = subscriptions
+    .map((s) => s.todo)
+    .filter((t, idx, arr) => arr.findIndex((x) => x.id === t.id) === idx)
+    .sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt));
 
   return (
     <section className={styles.panel}>
@@ -32,14 +53,8 @@ export default async function YourTasks() {
         <AddTask />
       </div>
 
-      <div className={styles.panelBody}>
-        <div className={styles.todoContainer}>
-          {todos.length === 0 ? (
-            <div className={styles.empty}>Немає задач</div>
-          ) : (
-            todos.map((t) => <TodoItem key={t.id} todo={t} />)
-          )}
-        </div>
+      <div className={styles.switchWrapper}>
+        <TaskSwitcher personal={personal as any} followed={followed as any} />
       </div>
     </section>
   );

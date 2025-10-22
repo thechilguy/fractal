@@ -3,8 +3,6 @@ import styles from "@/app/dashboard/dashboard.module.scss";
 import YourTasks from "../component/YourTasks/page";
 import RoomBox from "../room/page";
 
-import AddRoom from "@/app/component/Room/AddRoom";
-
 export default function Dashboard() {
   return (
     <div className={styles.Dashboard}>

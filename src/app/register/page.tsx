@@ -54,7 +54,6 @@ const Register = () => {
       return;
     }
 
-    // Успішно — перенаправляємо на логін
     router.push("/login");
   };
 

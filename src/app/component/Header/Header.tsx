@@ -1,11 +1,9 @@
-// src/app/component/Header/Header.tsx
-export const dynamic = "force-dynamic"; // щоб читання cookies не кешувалось
+export const dynamic = "force-dynamic";
 
 import styles from "./Header.module.scss";
 import { LuSquareStack } from "react-icons/lu";
 import { currentUser } from "@/utils/auth";
 import Link from "next/link";
-// див. нижче
 
 export default async function Header() {
   const user = await currentUser();

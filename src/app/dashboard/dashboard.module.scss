@@ -16,8 +16,8 @@
   margin: 0 0 clamp(24px, 4vw, 48px);
   justify-content: center;
   display: flex;
-  /* один над одним */
-  gap: 0; /* без проміжку між рядками */
+
+  gap: 0;
 }
 
 .TasksContainer {
@@ -29,13 +29,12 @@
   margin: 0 auto;
 }
 
-/* Панелі з виглядом “дві великі коробки” */
 .panel {
   background: #fff;
   border: 1px solid #e6e6e6;
   border-radius: 18px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-  min-height: 60vh; /* великі, як на скріні */
+  min-height: 60vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -56,7 +55,6 @@
   padding: 18px;
 }
 
-/* Мобільна адаптація — колонки стають стовпчиком */
 @media (max-width: 900px) {
   .TasksContainer {
     grid-template-columns: 1fr;

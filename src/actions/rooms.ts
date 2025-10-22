@@ -31,7 +31,6 @@ export async function joinRoom(formData: FormData) {
   const roomId = formData.get("roomId") as string;
   if (!roomId) throw new Error("No roomId provided");
 
-  // створюємо або знаходимо заявку
   await prisma.joinRequest.upsert({
     where: {
       roomId_requesterId: {

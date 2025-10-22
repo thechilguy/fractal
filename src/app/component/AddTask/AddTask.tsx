@@ -26,7 +26,9 @@ const schema = yup.object({
 
 type FormValues = yup.InferType<typeof schema>;
 
-const AddTask: React.FC = () => {
+type Props = { roomId?: string };
+
+const AddTask: React.FC<Props> = ({ roomId }) => {
   const [open, setOpen] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -50,7 +52,6 @@ const AddTask: React.FC = () => {
 
   const submitValid = () => {
     formRef.current?.requestSubmit();
-
     setOpen(false);
     reset({ title: "", description: "" });
   };
@@ -90,6 +91,8 @@ const AddTask: React.FC = () => {
               noValidate
               className={styles.Form}
             >
+              {roomId && <input type="hidden" name="roomId" value={roomId} />}
+
               <div className={styles.Field}>
                 <label htmlFor="title">Title</label>
                 <input

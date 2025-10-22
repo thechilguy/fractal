@@ -42,7 +42,6 @@ const Login = () => {
       return;
     }
 
-    // Успішний логін — редіректимо на клієнті
     router.push("/dashboard");
   };
 

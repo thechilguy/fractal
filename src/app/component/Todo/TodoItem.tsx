@@ -14,9 +14,15 @@ import {
   FiX,
 } from "react-icons/fi";
 
-type Props = {
-  todo: Pick<Todo, "id" | "title" | "description" | "createdAt" | "isDone">;
+type TodoDTO = Pick<
+  Todo,
+  "id" | "title" | "description" | "createdAt" | "isDone"
+> & {
+  roomId?: string | null;
+  room?: { id: string; name: string } | null;
 };
+
+type Props = { todo: TodoDTO };
 
 export default function TodoItem({ todo }: Props) {
   const [isEditing, setIsEditing] = useState(false);
@@ -24,15 +30,19 @@ export default function TodoItem({ todo }: Props) {
   const [description, setDescription] = useState(todo.description);
 
   return (
-    <article className={`${styles.card} ${todo.isDone ? styles.done : ""}`}>
+    <article
+      className={`${styles.card} ${todo.isDone ? styles.done : ""}`}
+      role="article"
+      aria-label={`Todo: ${todo.title}`}
+    >
       <div className={styles.left}>
-        {/* Toggle */}
-        <form action={toggleTodo}>
+        <form action={toggleTodo} className={styles.toggleForm}>
           <input type="hidden" name="id" value={todo.id} />
           <input type="hidden" name="next" value={(!todo.isDone).toString()} />
           <button
             type="submit"
             className={styles.toggleBtn}
+            aria-pressed={todo.isDone}
             aria-label={todo.isDone ? "Mark as not done" : "Mark as done"}
             title={todo.isDone ? "Mark as not done" : "Mark as done"}
           >
@@ -41,14 +51,44 @@ export default function TodoItem({ todo }: Props) {
         </form>
 
         <div className={styles.content}>
-          <Link href={`/todos/${todo.id}`} className={styles.title}>
-            {title}
-          </Link>
-          <div className={styles.desc}>{description}</div>
+          {!isEditing ? (
+            <Link href={`/todos/${todo.id}`} className={styles.title}>
+              {title}
+            </Link>
+          ) : (
+            <input
+              name="title"
+              className={styles.input}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              minLength={3}
+              maxLength={80}
+              required
+              aria-label="Edit title"
+            />
+          )}
+
+          {!isEditing ? (
+            <div className={styles.desc}>{description}</div>
+          ) : (
+            <textarea
+              name="description"
+              className={styles.textarea}
+              rows={2}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              minLength={5}
+              maxLength={2000}
+              required
+              aria-label="Edit description"
+            />
+          )}
+
           <div className={styles.meta}>
             <span className={styles.chip}>
               {new Date(todo.createdAt).toLocaleDateString()}
             </span>
+
             <span
               className={`${styles.status} ${
                 todo.isDone ? styles.ok : styles.progress
@@ -56,6 +96,19 @@ export default function TodoItem({ todo }: Props) {
             >
               {todo.isDone ? "Done" : "In progress"}
             </span>
+
+            {todo.roomId ? (
+              <Link
+                href={`/room/${todo.roomId}`}
+                className={styles.roomBadge}
+                onClick={(e) => e.stopPropagation()}
+                title={todo.room?.name ?? "Room"}
+              >
+                Room: {todo.room?.name ?? "—"}
+              </Link>
+            ) : (
+              <span className={styles.personalBadge}>Personal</span>
+            )}
           </div>
         </div>
       </div>
@@ -94,29 +147,14 @@ export default function TodoItem({ todo }: Props) {
           <>
             <form
               className={styles.inlineForm}
-              action={updateTodo}
-              onSubmit={() => setIsEditing(false)}
+              action={async (formData) => {
+                formData.set("title", title);
+                formData.set("description", description);
+                await updateTodo(formData);
+                setIsEditing(false);
+              }}
             >
               <input type="hidden" name="id" value={todo.id} />
-              <input
-                name="title"
-                className={styles.input}
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                minLength={3}
-                maxLength={80}
-                required
-              />
-              <textarea
-                name="description"
-                className={styles.textarea}
-                rows={2}
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                minLength={5}
-                maxLength={2000}
-                required
-              />
               <button
                 type="submit"
                 className={`${styles.iconBtn} ${styles.primary}`}

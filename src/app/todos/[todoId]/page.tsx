@@ -1,4 +1,3 @@
-// app/todos/[todoId]/page.tsx
 import { prisma } from "@/lib/prisma";
 import { currentUser } from "@/utils/auth";
 import { notFound, redirect } from "next/navigation";
