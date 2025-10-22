@@ -1,0 +1,219 @@
+$radius: 14px;
+$radius-lg: 18px;
+$border-color: #e6e7eb;
+$bg: #ffffff;
+$bg-soft: #f7f8fb;
+$text: #111827;
+$muted: #6b7280;
+$brand: #16a34a;
+$brand-weak: #dcfce7;
+$danger: #dc2626;
+$shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+.AddTaskButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid $border-color;
+  background: $bg;
+  color: $text;
+  padding: 10px 14px;
+  border-radius: $radius;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease,
+    transform 80ms ease;
+  svg {
+    font-size: 14px;
+  }
+  &:hover {
+    background: $bg-soft;
+    border-color: darken($border-color, 6%);
+  }
+  &:active {
+    transform: translateY(1px);
+  }
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($brand, 0.25);
+  }
+}
+.BlurOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.45);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  display: grid;
+  place-items: center;
+  z-index: 50;
+  animation: fadeIn 150ms ease;
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+.AddTodoForm {
+  width: min(560px, calc(100vw - 32px));
+  background: $bg;
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+  box-shadow: $shadow;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+  animation: pop 180ms ease;
+  @keyframes pop {
+    from {
+      transform: translateY(6px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
+.formHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 4px;
+  h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: $text;
+  }
+}
+.CloseButton {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid $border-color;
+  background: $bg;
+  color: $text;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease;
+  svg {
+    font-size: 18px;
+  }
+  &:hover {
+    background: $bg-soft;
+    border-color: darken($border-color, 6%);
+  }
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($brand, 0.25);
+  }
+}
+.Form {
+  display: grid;
+  gap: 12px;
+}
+.Field {
+  display: grid;
+  gap: 6px;
+  label {
+    font-size: 14px;
+    color: $muted;
+    font-weight: 600;
+  }
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid $border-color;
+    border-radius: $radius;
+    background: $bg;
+    color: $text;
+    font: inherit;
+    transition: border-color 140ms ease, background 140ms ease,
+      box-shadow 140ms ease;
+    &:focus {
+      outline: none;
+      border-color: $brand;
+      box-shadow: 0 0 0 3px $brand-weak;
+      background: #fff;
+    }
+    &::placeholder {
+      color: lighten($muted, 15%);
+    }
+  }
+  textarea {
+    resize: vertical;
+    min-height: 96px;
+  }
+}
+.Error {
+  margin: 2px 0 0;
+  color: $danger;
+  font-size: 12px;
+}
+.Actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+.Submit,
+.Cancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: $radius;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid $border-color;
+  background: $bg;
+  color: $text;
+  transition: background 140ms ease, border-color 140ms ease, opacity 120ms ease,
+    transform 80ms ease;
+  &:disabled {
+    opacity: 0.7;
+    cursor: default;
+  }
+  &:active {
+    transform: translateY(1px);
+  }
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($brand, 0.25);
+  }
+}
+.Submit {
+  background: $brand;
+  border-color: darken($brand, 4%);
+  color: #fff;
+  &:hover {
+    background: darken($brand, 5%);
+    border-color: darken($brand, 10%);
+  }
+}
+.Cancel {
+  &:hover {
+    background: $bg-soft;
+    border-color: darken($border-color, 6%);
+  }
+}
+@media (max-width: 420px) {
+  .AddTodoForm {
+    padding: 12px;
+  }
+  .Actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+  .Submit,
+  .Cancel {
+    width: 100%;
+  }
+}

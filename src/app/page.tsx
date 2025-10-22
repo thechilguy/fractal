@@ -1,3 +1,9 @@
+import Dashboard from "./dashboard/page";
+
 export default function Home() {
-  return <div>task</div>;
+  return (
+    <div>
+      <Dashboard />
+    </div>
+  );
 }

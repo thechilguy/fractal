@@ -1,0 +1,134 @@
+$radius: 14px;
+$radius-lg: 18px;
+$border-color: #e6e7eb;
+$bg: #ffffff;
+$bg-soft: #f7f8fb;
+$text: #111827;
+$muted: #6b7280;
+$brand: #16a34a; // зелений акцент
+$brand-weak: #dcfce7; // підсвічування у фокусі
+$danger: #dc2626;
+$shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+.AddRoomButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid $border-color;
+  background: $bg;
+  color: $text;
+  padding: 10px 14px;
+  border-radius: $radius;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease,
+    transform 80ms ease;
+
+  svg {
+    font-size: 14px;
+  }
+
+  &:hover {
+    background: $bg-soft;
+    border-color: darken($border-color, 6%);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+.BlurOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+.Modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  width: 360px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
+
+.CloseButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #444;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #000;
+  }
+}
+
+.Form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.Input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+
+  &:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+  }
+}
+
+.Actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.CreateButton {
+  background: #16a34a;
+  border: none;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #15803d;
+  }
+}
+
+.CancelButton {
+  background: #e5e7eb;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #d1d5db;
+  }
+}

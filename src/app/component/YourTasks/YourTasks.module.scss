@@ -1,0 +1,156 @@
+.panel {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.switchWrapper {
+  padding: 1rem;
+}
+
+.panelHead {
+  padding: 14px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #4a4a4a;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #eee;
+  background: #fafafa;
+}
+
+.panelBody {
+  display: flex;
+  align-items: center;
+  padding: 18px;
+  gap: 12px;
+}
+
+.status {
+  flex: 1;
+  padding: 12px 0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+.panel {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.panelHead {
+  padding: 14px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #4a4a4a;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #eee;
+  background: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.panelBody {
+  padding: 18px;
+}
+
+.switchBar {
+  display: inline-flex;
+  background: #f3f3f3;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.tab {
+  position: relative;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  outline: none;
+}
+
+.tab:focus-visible {
+  box-shadow: 0 0 0 2px #cfe5ff;
+}
+
+.tabActive {
+  background: #ffffff;
+  color: #111;
+  border: 1px solid #eaeaea;
+}
+
+.counter {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 0 6px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+  height: 18px;
+  color: #3a6df0;
+  background: #e9f0ff;
+  border-radius: 999px;
+  vertical-align: middle;
+}
+
+.todoContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+
+  @media (min-width: 720px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.empty {
+  padding: 14px;
+  background: #fafafa;
+  border: 1px dashed #e2e2e2;
+  border-radius: 12px;
+  color: #6b6b6b;
+  font-size: 14px;
+}
+
+.done {
+  @extend .status;
+  background: #e6f5ec;
+  border: 1px solid #b9e2c7;
+  color: #2b6b3d;
+}
+
+.progress {
+  @extend .status;
+  background: #fff5e0;
+  border: 1px solid #ffd89c;
+  color: #8a6a00;
+}
+
+.fail {
+  @extend .status;
+  background: #fdeaea;
+  border: 1px solid #f5b5b5;
+  color: #8a1f1f;
+}
